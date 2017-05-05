@@ -50,6 +50,46 @@ function getSingleUser(req, res, next) {
                 user.completed.push(challenge);
             });
         }
+
+
+function search(nameKey, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        console.log(myArray[i].name);
+        console.log(nameKey);
+        if (myArray[i].name === nameKey) {
+            
+            return myArray[i];
+        }
+    }
+}
+
+    var result =[];
+
+
+        var filePath = './sources/course.json';
+
+
+
+            //Sync
+            var fs = require('fs');
+            var obj = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+            //console.log(obj);
+
+            obj.forEach(function(element) {
+                element.subheader.forEach(function(item) {
+                        //console.log(element.subheader[i]);
+                        //item.forEach(function(section) {
+                        //console.log(item);
+                        var found = search(item[0], user);
+                        result.push(found);   
+                
+                });
+                
+            });
+            console.log(JSON.stringify(result));
+
+
+
         if (!error && response.statusCode != 200) {
             res.setHeader('content-type', 'application/json');
             res.send(JSON.stringify("ErrorMessage", "Please enter a valid user name"));

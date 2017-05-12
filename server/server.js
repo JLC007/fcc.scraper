@@ -2,27 +2,30 @@ var express = require('express');
 var request = require('request');
 var cheerio = require('cheerio');
 
+
+
+
 function getSingleUser(req, res, next) {
-    
-    if(req.params.name === undefined){
+
+    if (req.params.name === undefined) {
         res.setHeader('content-type', 'application/json');
         res.send(JSON.stringify("ErrorMessage", "Please provide a user name"));
     }
 
     var url = 'https://www.freecodecamp.com/' + req.params.name;
     var r = request.defaults();
-    var user =  {name:'', profileImage: '', location : '', completed: []};
-    
-    user.name = ""; 
-    user.profileImage = ""; 
+    var user = { name: '', profileImage: '', location: '', completed: [] };
+
+    user.name = "";
+    user.profileImage = "";
     user.location = "";
-    
+
     r(url, function (error, response, body) {
 
         if (!error && response.statusCode == 200) {
             var $ = cheerio.load(body);
 
-            $('.public-profile-img').filter(function(){
+            $('.public-profile-img').filter(function () {
                 var data = $(this);
 
                 profileImage = data[0].attribs.src;
@@ -34,7 +37,6 @@ function getSingleUser(req, res, next) {
                 user.location = location;
             })
 
-
             $('tr').filter(function (i, element) {
                 if (i === 0) {
                     return true;
@@ -45,58 +47,105 @@ function getSingleUser(req, res, next) {
                 challenge.completed_at = '';
                 challenge.title = $(this).children().first().text();
                 challenge.completed_at = $(this).children().eq(1).text();
-                challenge.status = 1;
+                challenge.status = 0;
 
                 user.completed.push(challenge);
             });
         }
 
-
-function search(nameKey, myArray){
-    for (var i=0; i < myArray.length; i++) {
-        console.log(myArray[i].name);
-        console.log(nameKey);
-        if (myArray[i].name === nameKey) {
-            
-            return myArray[i];
+        function search(nameKey, myArray) {
+            var array = myArray.completed;
+            for (var i = 0; i < array.length; i++) {
+                if (array[i].title === nameKey) {
+                    return array[i];
+                }
+            }
         }
-    }
-}
 
-    var result =[];
-
+        var result = [];
 
         var filePath = './sources/course.json';
+        //Sync
+        var fs = require('fs');
+        var obj = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
+        var totalmainsections = 0;
+        var totalsubsections = 0;
+        var totalsections = 0;
 
+        var totalmainsectionscompleted = 0;
+        var totalsubsectionscompleted = 0;
 
-            //Sync
-            var fs = require('fs');
-            var obj = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-            //console.log(obj);
+        obj.forEach(function (element) {
+            element.subheader.forEach(function (item) {
+                item.sections.forEach(function (section) {
+                    var found = search(section, user);
+                    if (found !== undefined) {
+                        result.push(
+                            {
+                                mainsection: element.name,
+                                subsection: item.name,
+                                maptitle: section,
+                                title: found.title,
+                                completed: found.title === section,
+                                date_completed: found.completed_at
+                            });
+                    }
+                    else {
+                        result.push({
+                            mainsection: element.name,
+                            subsection: item.name,
+                            maptitle: section,
+                            title: "Not Completed",
+                            completed: false,
+                            date_completed: ''
+                        });
+                    }
 
-            obj.forEach(function(element) {
-                element.subheader.forEach(function(item) {
-                        //console.log(element.subheader[i]);
-                        //item.forEach(function(section) {
-                        //console.log(item);
-                        var found = search(item[0], user);
-                        result.push(found);   
-                
                 });
-                
+
             });
-            console.log(JSON.stringify(result));
-
-
+        });
 
         if (!error && response.statusCode != 200) {
             res.setHeader('content-type', 'application/json');
             res.send(JSON.stringify("ErrorMessage", "Please enter a valid user name"));
         }
         res.setHeader('content-type', 'application/json');
-        res.send(JSON.stringify(user, null, 3));
+        res.send(JSON.stringify({ name: user.name, avater: user.profileImage, progress: result }, null, 3));
     });
 }
 
-module.exports = { getSingleUser: getSingleUser }
+function getMainSections(req, res, next) {
+    var mainsections = [];
+    var filePath = './sources/course.json';
+    //Sync
+    var fs = require('fs');
+    var obj = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+    obj.forEach(function (element) {
+
+        mainsections.push(element.name);
+    });
+   
+    res.setHeader('content-type', 'application/json');
+    res.send(JSON.stringify(mainsections, null, 3));
+}
+
+function getSubSections(req, res, next) {
+    var subsections = [];
+    var filePath = './sources/course.json';
+    //Sync
+    var fs = require('fs');
+    var obj = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+    obj.forEach(function (element) {
+        element.subheader.forEach(function (item) {
+            subsections.push(item.name);
+        });
+    });
+    res.setHeader('content-type', 'application/json');
+    res.send(JSON.stringify(subsections, null, 3));
+}
+
+module.exports = { getSingleUser: getSingleUser, getMainSections: getMainSections, getSubSections: getSubSections }

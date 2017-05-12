@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <!-- Include font first -->
+    <link href="/css/style.css" rel='stylesheet' type='text/css'>
+    <script src="/js/main.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="logo">
+            Free Code Camp User Stats
+        </div>
+        <div class="toolbar">
+            <input type="text" id="username" value="jlc007">
+            <button id="myBtn">Fetch User Information</button>
+        </div>
+
+        <div class="alert" id="alert"></div>
+
+        <div class="container">
+            <div class="column-center">
+                <div><img id="avatar" class="avatar" /></div>
+                <div><label id="fullname" class="fullname"></label></div>
+            </div>
+            <div class="column-left"></div>
+            <div class="column-right">
+                <div id="days" class="days"></div>
+            </div>
+        </div>
+        <div class="hline"></div>
+        <div id="results">
+            <div id="stats" class="stats"></div>
+        </div>
+
+        <script>
+            document.getElementById("myBtn").addEventListener("click", function () {
+                var username = document.getElementById('username').value;
+                if (username) {
+                    var result = JSON.parse(getUserStats(username));
+                    if (result) {
+                        if (result.name !== '') {
+                            //document.getElementById('results').innerText = result;
+                            document.getElementById('fullname').innerText = result.name;
+                            document.getElementById('avatar').src = result.avater;
+
+                            var sections = '';
+                            var mainsectioncompleted = 0;
+                            var subsectioncompleted = 0;
+                            var mainsectiontotal = 0;
+                            var subsectiontotal = 0;
+                            var totalcompleted = 0;
+                            //Main Section Stats
+                            var sectioncount = 0;
+                            var subsectioncount = 0;
+
+                            var mainsections = [];
+
+                            var mainStats = [];
+                            var mainSec = JSON.parse(getMainSections());
+                            var subsections = JSON.parse(getSubSections());
+
+                            for (var i = 0; i < result.progress.length; i++) {
+                                if (result.progress[i].completed) {
+                                    totalcompleted++;
+                                }
+                            }
+                            //var mainsections
+                            var output = '<div class = "activity-chart"><h1>Progress Chart - Total Progress: ' + totalcompleted + '/' + result.progress.length + ' </h1><ol><div class = "week">';
+
+                            for (var i = 0; i < result.progress.length; i++) {
+
+                                if (result.progress[i].completed) {
+                                    output += "<li class='completed'>";
+                                    output += '<span class = "tooltip">' + result.progress[i].maptitle + '</span>';
+                                }
+                                else {
+                                    output += "<li>";
+                                    output += '<span class = "tooltip">' + result.progress[i].maptitle + '</span>';
+                                }
+                                output += "</li>";
+                            }
+
+                            output += "</div></ol>";
+                            var stringHTML = '<div><table>';
+
+                            for (var y = 0; y < mainSec.length; y++) {
+                                var mainsectioncompleted = result.progress.filter(function (item) {
+                                    return item.mainsection === mainSec[y] && item.completed === true;
+                                })
+
+                                stringHTML += '<tr><td><div class="mainname">' + mainSec[y] + '</div></td><td>' + mainsectioncompleted.length + '</td></tr>';
+
+                                for (var x = 0; x < subsections.length; x++) {
+                                    var subsectioncompleted = result.progress.filter(function (item) {
+                                        return item.subsection === subsections[x] && item.mainsection === mainSec[y] && item.completed === true;
+                                    })
+                                    stringHTML += '<tr><td><div class="secname">' + subsections[x] + '</div></td><td>' + subsectioncompleted.length + '</td></tr>';
+                                }
+                            }
+
+                            stringHTML += '</table></div>';
+
+                            //Completed
+                            document.getElementById('days').innerHTML += output;
+                            document.getElementById('stats').innerHTML += stringHTML;
+                            document.getElementById('results').style.display = "block";
+                        } else {
+                            document.getElementById('alert').innerText = 'This user does not exist';
+                            document.getElementById('alert').style.display = 'block';
+                            document.getElementById('results').style.display = "none";
+                        }
+                    }
+                    else {
+                        document.getElementById('alert').innerText = 'The request is empty';
+                        document.getElementById('alert').style.display = 'block';
+                        document.getElementById('results').style.display = "none";
+                    }
+                }
+                else {
+                    document.getElementById('alert').innerText = 'Please enter a valid username';
+                    document.getElementById('alert').style.display = 'block';
+                    document.getElementById('results').style.display = "none";
+                }
+            });
+        </script>
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+body{ font-family: 'Roboto', sans-serif; }
+.wrapper { height: 100vh; display: flex; flex-direction: column; }
+#results {display:none;}
+.alert {  width: 100%;  height: 30px;  background-color: #e74c3c;  line-height: 30px;  padding: 5px 10px 5px 10px;  font-family: arial;
+  color: white;  font-weight: bold;  border-radius: 3px;  display:none;}
+.stats {    opacity:0.87;    padding-top:5px;}
+.fullname {   font-weight:bold;opacity:0.87;  font-size:22px; text-transform: uppercase;}
+.avatar {    width:55%;        position: relative;
+    -webkit-border-radius: 50%;    -moz-border-radius: 50%;    border-radius: 10%;    -webkit-box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0,0,0,.2);   box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0,0,0,.2);
+}
+
+.toolbar {    padding:5px;    float:right; width:50%;}
+.secname {       padding:5px; font-size:12px;}
+.mainname {    padding:5px;    text-shadow: #999;    font-weight:bold;}
+.wrap {width:100%;}
+ol, li { padding: 0; margin: 0; list-style: none;}
+h1 {   font-size: 1.5em; }
+.activity-chart, h1 {color: #525252;}
+.days li { background: #ebebeb; }
+.activity-chart { position: relative; }
+
+.container {margin-top:20px;}
+.column-left{ float: left; width: 5%; }
+.column-right{ float: right; width: 80%; }
+.column-center{ display: inline-block; width: 15%; }
+
+.days-of-week { width: 40px;  position: absolute;}
+.completed { background: #1e6823 !important; }
+.days { font-size: 1em;float:right }
+.activity-chart .offset:hover { outline: none; }
+.activity-chart .offset { background: white; }
+.days li { width: 12px;height: 12px; float: right;  margin: 1px 1.5px;}
+.days li .tooltip { display: none; }
+.days li:hover {  outline: 1px solid; position: relative; z-index: 3; }
+.days li:hover .tooltip {
+ 
+  display: block;
+  position: absolute;
+  top: -10px;
+  left: -85px;
+  min-width: 75px;
+  padding: 5px 20px;
+  text-align: center;
+  background-color: #333; 
+  color: #f1f1f1;
+}
+
+/*** little triangle on the tooltip ***/
+.tooltip:before {
+  content: "";
+  position: absolute;
+  width: 0; 
+  height: 0; 
+  
+  bottom: -7px;
+  right: 51px;
+  
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-top: 9px solid #333;
+}
+
+.header-wrap {
+  background: #333;
+  /*border removed*/
+  box-shadow: 0 5px 10px #aaa;
+  -webkit-box-shadow: 0 5px 10px #aaa;
+  -moz-box-shadow: 0 5px 10px #aaa;
+}
+
+.logo { color:#fff; opacity:0.87;}
+.hline {border-bottom: 1px solid #000; opacity:0.87;padding:10px;}

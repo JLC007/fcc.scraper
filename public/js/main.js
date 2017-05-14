@@ -17,7 +17,7 @@ function httpGetTest(theUrl) {
 
 function getUserStats(name) {
     //console.log(name);
-    return httpGetTest('http://localhost:3500/user/' + name);
+    return httpGet('http://localhost:3500/user/' + name);
 }
 
 function getMainSections() {

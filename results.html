@@ -32,14 +32,24 @@
         </div>
         <div class="hline"></div>
         <div id="results">
-            <div id="stats" class="stats"></div>
+            <div id="stats" class="stats">
+                <div id="mainsections" class="mainsections"></div>
+                <div id="subsections" class="subsections"></div>
+            </div>
         </div>
 
         <script>
+            var result;
             document.getElementById("myBtn").addEventListener("click", function () {
                 var username = document.getElementById('username').value;
+                result = JSON.parse(getUserStats(username));
+                //document.getElementById('mainsection').innerHTML = '';
+                document.getElementById('days').innerHTML = '';
+                //document.getElementById('stats').innerHTML = '';
+                document.getElementById('results').style.display = "none";
+
                 if (username) {
-                    var result = JSON.parse(getUserStats(username));
+
                     if (result) {
                         if (result.name !== '') {
                             //document.getElementById('results').innerText = result;
@@ -60,7 +70,7 @@
 
                             var mainStats = [];
                             var mainSec = JSON.parse(getMainSections());
-                            var subsections = JSON.parse(getSubSections());
+
 
                             for (var i = 0; i < result.progress.length; i++) {
                                 if (result.progress[i].completed) {
@@ -84,48 +94,83 @@
                             }
 
                             output += "</div></ol>";
-                            var stringHTML = '<div><table>';
+                            var stringHTML = 'Main Sections<table>';
 
+                            //MAINSECTIONS
                             for (var y = 0; y < mainSec.length; y++) {
                                 var mainsectioncompleted = result.progress.filter(function (item) {
                                     return item.mainsection === mainSec[y] && item.completed === true;
                                 })
+                                //console.log(mainSec[y]);
+                                stringHTML += '<tr><td><div class="mainname"><button onclick=getSubs(this) id="' + mainSec[y] + '">' + mainSec[y] + '</button></div></td><td>' + mainsectioncompleted.length + '</td></tr>';
 
-                                stringHTML += '<tr><td><div class="mainname">' + mainSec[y] + '</div></td><td>' + mainsectioncompleted.length + '</td></tr>';
-
-                                for (var x = 0; x < subsections.length; x++) {
-                                    var subsectioncompleted = result.progress.filter(function (item) {
-                                        return item.subsection === subsections[x] && item.mainsection === mainSec[y] && item.completed === true;
-                                    })
-                                    stringHTML += '<tr><td><div class="secname">' + subsections[x] + '</div></td><td>' + subsectioncompleted.length + '</td></tr>';
-                                }
                             }
 
                             stringHTML += '</table></div>';
 
                             //Completed
                             document.getElementById('days').innerHTML += output;
-                            document.getElementById('stats').innerHTML += stringHTML;
+                            document.getElementById('mainsections').innerHTML = stringHTML;
                             document.getElementById('results').style.display = "block";
                         } else {
                             document.getElementById('alert').innerText = 'This user does not exist';
                             document.getElementById('alert').style.display = 'block';
                             document.getElementById('results').style.display = "none";
+                             document.getElementById('stats').style.display = "none";
+                       
                         }
                     }
                     else {
                         document.getElementById('alert').innerText = 'The request is empty';
                         document.getElementById('alert').style.display = 'block';
                         document.getElementById('results').style.display = "none";
+                        document.getElementById('stats').style.display = "none";
                     }
                 }
                 else {
                     document.getElementById('alert').innerText = 'Please enter a valid username';
                     document.getElementById('alert').style.display = 'block';
                     document.getElementById('results').style.display = "none";
+                     document.getElementById('stats').style.display = "none";
                 }
             });
+
+            function getSubs(button) {
+                //SUBSECTIONS
+                var subsections = JSON.parse(getSubSections());
+                var stringHTML = '';
+
+                stringHTML += '<table>';
+
+                var mainName = '';
+                var arr = [];
+
+                for (var i = 0; i < subsections.length; i++) {
+                    var counter = 0;
+                    var completed = 0;
+                    result.progress.forEach(function (item) {
+                        if (subsections[i].sub === item.subsection) { counter++; mainName = item.mainsection; }
+
+                        if (subsections[i].sub === item.subsection && item.completed === true) {
+
+                            completed++;
+                        }
+                    });
+
+                    arr.push({ mainName: mainName, secName: subsections[i].sub, completed: completed, counter: counter });
+                }
+
+                arr.forEach(function (item) {
+                    if (item.mainName === button.id) {
+                        stringHTML += '<tr><td><div class="secname">' + item.secName + '</div></td><td>' + item.completed + '/' + item.counter + '</td></tr>';
+                    }
+                });
+
+                stringHTML += '</table>';
+
+                document.getElementById('subsections').innerHTML = stringHTML;
+                document.getElementById('results').style.display = "block";
+            };
         </script>
 </body>
-
 </html>

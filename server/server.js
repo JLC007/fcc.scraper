@@ -127,7 +127,7 @@ function getMainSections(req, res, next) {
 
         mainsections.push(element.name);
     });
-   
+
     res.setHeader('content-type', 'application/json');
     res.send(JSON.stringify(mainsections, null, 3));
 }
@@ -138,14 +138,26 @@ function getSubSections(req, res, next) {
     //Sync
     var fs = require('fs');
     var obj = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    var completed = 0;
+
+    var counters = [];
+    var section = '';
+    var previouscounter = 0;
 
     obj.forEach(function (element) {
+        var counter = 0;
+        section = '';
         element.subheader.forEach(function (item) {
-            subsections.push(item.name);
+            section = item.name;
+            counters.push({ main: element.name, sub: section,numofsections: item.sections.length,numofsubsections: element.subheader.length });
         });
+
+
     });
+
+
     res.setHeader('content-type', 'application/json');
-    res.send(JSON.stringify(subsections, null, 3));
+    res.send(JSON.stringify(counters, null, 3));
 }
 
 module.exports = { getSingleUser: getSingleUser, getMainSections: getMainSections, getSubSections: getSubSections }

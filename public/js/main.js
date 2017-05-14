@@ -23,12 +23,14 @@ function getUserStats(name) {
 
 function getMainSections() {
     //console.log(name);
-    return httpGet('http://localhost:3500/mainsections');
+    //return httpGet('http://localhost:3500/mainsections');
+    return httpGet('https://fcc-scraper.herokuapp.com/mainsections');
 }
 
 function getSubSections()
 {
-    return httpGet('http://localhost:3500/subsections');
+    //return httpGet('http://localhost:3500/subsections');
+    return httpGet('https://fcc-scraper.herokuapp.com/subsections');
 }
 
 

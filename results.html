@@ -23,7 +23,7 @@
         <div class="container">
             <div class="column-center">
                 <div><img id="avatar" class="avatar" /></div>
-                <div><label id="fullname" class="fullname"></label></div>
+                <div class="fullname"><label id="fullname" ></label></div>
             </div>
             <div class="column-left"></div>
             <div class="column-right">
@@ -48,12 +48,15 @@
                 document.getElementById('days').innerHTML = '';
                 //document.getElementById('stats').innerHTML = '';
                 document.getElementById('results').style.display = "none";
+                document.getElementById('alert').style.display = "none";
+                
 
                 if (username) {
 
                     if (result) {
                         if (result.name !== '') {
                             //document.getElementById('results').innerText = result;
+                            document.getElementById('avatar').style.display = "block";
                             document.getElementById('fullname').innerText = result.name;
                             document.getElementById('avatar').src = result.avater;
 
@@ -166,7 +169,7 @@
 
                 arr.forEach(function (item) {
                     if (item.mainName === button.id) {
-                        stringHTML += '<tr><td><div class="secname"><a href="#" onclick="getSec(this)">' + item.secName + '</a></div></td><td>' + item.completed + '/' + item.counter + '</td></tr>';
+                        stringHTML += '<tr><td><div class="secname"><a onclick="getSec(this)">' + item.secName + '</a></div></td><td>' + item.completed + '/' + item.counter + '</td></tr>';
                     }
                 });
 

@@ -1,4 +1,4 @@
-body{ font-family: 'Roboto', sans-serif; }
+body { font-family: 'Roboto', sans-serif; }
 .wrapper { height: 100vh; display: flex; flex-direction: column; }
 #results {display:none;}
 .alert {  width: 100%;  height: 30px;  background-color: #e74c3c;  line-height: 30px;  padding: 5px 10px 5px 10px;  font-family: arial;
@@ -10,8 +10,8 @@ body{ font-family: 'Roboto', sans-serif; }
     -moz-box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0,0,0,.2);   box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0,0,0,.2);
 }
 
-.toolbar {    padding:5px;    float:right; width:50%;}
-.secname {       padding:5px; font-size:12px;}
+.toolbar {  display: block;  padding:5px;    float:right; width:70%;}
+.secname {       padding:5px; font-size: 1em;}
 .mainname {    padding:5px;    text-shadow: #999;    font-weight:bold;}
 .wrap {width:100%;}
 ol, li { padding: 0; margin: 0; list-style: none;}
@@ -22,21 +22,27 @@ h1 {   font-size: 1.5em; }
 
 .container {margin-top:20px;}
 .column-left{ float: left; width: 5%; }
-.column-right{ float: right; width: 80%; }
-.column-center{ display: inline-block; width: 15%; }
+.column-right{ float: right; width: 75%; }
+.column-center{ display: inline-block; width: 20%;padding-left:25px; }
 
 .days-of-week { width: 40px;  position: absolute;}
-.completed { background: #1e6823 !important; }
+.closed { color: #1e6823 !important;;font-size: 1em; }
+.completed { background: #1e6823 !important;font-size: 1em; }
+.open { color: #ff0000 !important;font-size: 1em; }
 .days { font-size: 1em;float:right }
-.activity-chart .offset:hover { outline: none; }
-.activity-chart .offset { background: white; }
 .days li { width: 12px;height: 12px; float: right;  margin: 1px 1.5px;}
-.days li .tooltip { display: none; }
-.days li:hover {  outline: 1px solid; position: relative; z-index: 3; }
-.mainsections {float:left;}
-.subsections {display:inline-block;padding:25px;box-sizing: border-box;
+.mainsections {float:left;padding:25px;box-sizing: border-box;
   -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;}
+  -webkit-box-sizing: border-box;font-size: 1em;}
+.subsections {display:inline-block;padding:25px;box-sizing: border-box;
+  -moz-box-sizing: border-box;font-size: 1em;
+  -webkit-box-sizing: border-box;font-size: 1em;}
+  .sections {
+      float:right;padding:25px;box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  width:35%;
+  }
 
 
 .header-wrap {
@@ -50,37 +56,79 @@ h1 {   font-size: 1.5em; }
 .logo { color:#fff; opacity:0.87;}
 .hline {border-bottom: 1px solid #000; opacity:0.87;padding:10px;}
 
-.tooltip{position:relative;}
-.tooltip .dumClass {
-    z-index: 10;
-    display: none;
-    padding: 14px 20px;
-    bottom:20px;
-    left:0;
-    width: 240px;
-    line-height: 16px;
-    position: absolute;
+input {
+    -moz-border-radius: 18px;
+    -webkit-border-radius: 18px;
+    border-radius: 18px;
+    border: 1px solid #d9d9d9;
+    width: 285px;
+    height: 36px;
+    padding-left: 17px;
+    margin-right: 50px;
+    color: #999999;
+}
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
 }
 
-.tooltip:hover .dumClass {
-    display: inline;
-    color: #ffffff;
-    border: 1px solid #DCA;
-    background: #444;
-    -moz-border-radius: 11px;
-    -webkit-border-radius: 11px;
-    border-radius: 11px;
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 150px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
 }
 
-.dumClass:after {
-    position: absolute;
-    display: block;
-    content: "";
-    border-style: solid;
-    border-width: 8px;
-    height: 0;
-    width: 0;
-    border-color: #444 transparent transparent transparent;
-    bottom: -16px;
-    left: 14px;
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.button {
+  border-radius: 4px;
+  background-color: #f4511e;
+  border: none;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 1em;
+  padding: 10px;
+  width: 200px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 25px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
 }

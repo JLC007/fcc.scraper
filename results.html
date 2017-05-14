@@ -15,7 +15,7 @@
         </div>
         <div class="toolbar">
             <input type="text" id="username" value="jlc007">
-            <button id="myBtn">Fetch User Information</button>
+            <button id="myBtn" class="button">Fetch User Information</button>
         </div>
 
         <div class="alert" id="alert"></div>
@@ -35,6 +35,7 @@
             <div id="stats" class="stats">
                 <div id="mainsections" class="mainsections"></div>
                 <div id="subsections" class="subsections"></div>
+                <div id="sections" class="sections"></div>
             </div>
         </div>
 
@@ -78,23 +79,25 @@
                                 }
                             }
                             //var mainsections
-                            var output = '<div class = "activity-chart"><h1>Progress Chart - Total Progress: ' + totalcompleted + '/' + result.progress.length + ' </h1><ol><div class = "week">';
+                            var output = '<div class = "activity-chart"><h2>Progress Chart - Total Progress: ' + totalcompleted + '/' + result.progress.length + ' </h2><ol><div class = "week">';
 
                             for (var i = 0; i < result.progress.length; i++) {
 
                                 if (result.progress[i].completed) {
-                                    output += "<li class='completed'>";
-                                    output += '<span class = "tooltip">' + result.progress[i].maptitle + '</span>';
+                                    output += "<li class='completed tooltip'>";
+                                    output += '<span class="tooltiptext">' + result.progress[i].maptitle + '</span>';
+
                                 }
                                 else {
-                                    output += "<li>";
-                                    output += '<span class = "tooltip">' + result.progress[i].maptitle + '</span>';
+                                    output += "<li class='tooltip'>";
+                                    output += '<span class="tooltiptext">' + result.progress[i].maptitle + '</span>';
+
                                 }
                                 output += "</li>";
                             }
 
                             output += "</div></ol>";
-                            var stringHTML = 'Main Sections<table>';
+                            var stringHTML = '<table>';
 
                             //MAINSECTIONS
                             for (var y = 0; y < mainSec.length; y++) {
@@ -102,7 +105,7 @@
                                     return item.mainsection === mainSec[y] && item.completed === true;
                                 })
                                 //console.log(mainSec[y]);
-                                stringHTML += '<tr><td><div class="mainname"><button onclick=getSubs(this) id="' + mainSec[y] + '">' + mainSec[y] + '</button></div></td><td>' + mainsectioncompleted.length + '</td></tr>';
+                                stringHTML += '<tr><td><div class="mainname"><a onclick=getSubs(this) id="' + mainSec[y] + '">' + mainSec[y] + '</a></div></td><td>' + mainsectioncompleted.length + '</td></tr>';
 
                             }
 
@@ -112,6 +115,7 @@
                             document.getElementById('days').innerHTML += output;
                             document.getElementById('mainsections').innerHTML = stringHTML;
                             document.getElementById('results').style.display = "block";
+                            
                         } else {
                             document.getElementById('alert').innerText = 'This user does not exist';
                             document.getElementById('alert').style.display = 'block';
@@ -162,7 +166,7 @@
 
                 arr.forEach(function (item) {
                     if (item.mainName === button.id) {
-                        stringHTML += '<tr><td><div class="secname">' + item.secName + '</div></td><td>' + item.completed + '/' + item.counter + '</td></tr>';
+                        stringHTML += '<tr><td><div class="secname"><a href="#" onclick="getSec(this)">' + item.secName + '</a></div></td><td>' + item.completed + '/' + item.counter + '</td></tr>';
                     }
                 });
 
@@ -170,7 +174,29 @@
 
                 document.getElementById('subsections').innerHTML = stringHTML;
                 document.getElementById('results').style.display = "block";
+                document.getElementById('sections').innerHTML = '';
             };
+
+            function getSec(link) {
+                 var stringHTML = '';
+
+                stringHTML += '<table>';
+                result.progress.forEach(function (item) {
+                        if (link.text === item.subsection) {
+                            if(item.completed) {
+                                stringHTML += '<tr><td><div class="secname closed">' + item.maptitle + '</a></div></td></tr>';
+                            }
+                            else {
+                                stringHTML += '<tr><td><div class="secname open">' + item.maptitle + '</a></div></td></tr>';
+                            }
+
+                        }
+                    });
+                stringHTML += '</table>';
+                document.getElementById('sections').innerHTML = stringHTML;
+                document.getElementById('results').style.display = "block";
+
+            }
         </script>
 </body>
 </html>

@@ -17,7 +17,8 @@ function httpGetTest(theUrl) {
 
 function getUserStats(name) {
     //console.log(name);
-    return httpGet('http://localhost:3500/user/' + name);
+    //return httpGet('http://localhost:3500/user/' + name);
+    return httpGet('https://fcc-scraper.herokuapp.com/user/' + name);
 }
 
 function getMainSections() {

@@ -2,9 +2,6 @@ var express = require('express');
 var request = require('request');
 var cheerio = require('cheerio');
 
-
-
-
 function getSingleUser(req, res, next) {
 
     if (req.params.name === undefined) {
